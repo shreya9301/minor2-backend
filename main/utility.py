@@ -2,18 +2,22 @@ from PIL import Image
 import numpy as np
 import random
 import os
-import uuid
+import datetime
 def create_dirs(patient_name):
         Base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # print(Base_dir)
         Dir = os.path.join(Base_dir,"media/")
         # print(Dir)
         final_dir = os.path.join(Dir,patient_name+"/")
-        print(final_dir)
+        # print(final_dir)
         print(os.path.isdir(final_dir))
         if (os.path.isdir(final_dir))== False :
                 os.mkdir(final_dir)
         
+        final_dir = os.path.join(final_dir,str(datetime.datetime.now().date()))
+        print(final_dir)
+        if (os.path.isdir(final_dir))== False :
+                os.mkdir(final_dir)
         return final_dir
 
 def Random_places(n,recons):
