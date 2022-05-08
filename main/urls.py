@@ -5,5 +5,6 @@ urlpatterns = [
     path('register_doctor/', views.register_doctor, name='register'),
     path('register_patient/', views.register_patient, name='register'),
     path('add_Prescription/', views.addPrescription, name='addPrescription'),
+    path('get_Prescription/', views.get_prescription, name='getPrescription'),
     # path('', views.index, name='index'),
 ]

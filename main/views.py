@@ -60,4 +60,20 @@ def addPrescription(request):
 	# return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-	
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny, ))
+def get_prescription(request):
+	"""For getting the prescription of a patient"""
+	# print(request.GET['doctor_id'])
+	doctor_id = request.GET['doctor_id']
+	Curr_Doc = Doctor.objects.get(doctor_id=doctor_id)
+	patient_id = request.GET['patient_id']
+	Curr_pati = Patient.objects.get(patient_id=patient_id)
+	choosen_date = request.GET['date']
+	# print(choosen_date)
+	Prescription_list = Prescription.objects.filter(doctor_id=Curr_Doc,patient_id=Curr_pati,prescription_date=choosen_date)
+	# Prescription_list = Prescription.objects.filter(doctor_id=Curr_Doc)
+	raw_image = Prescription_list[0].prescription_img
+	# return HttpResponse("Hello")
+
+	return HttpResponse(raw_image, content_type="image/png")
