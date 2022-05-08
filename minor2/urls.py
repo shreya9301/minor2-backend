@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 from rest_framework_simplejwt import views as jwt_views
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 import main
 
@@ -26,4 +27,4 @@ urlpatterns = [
     path('token/',jwt_views.TokenObtainPairView.as_view(),name='token_obtain'),
     path('token_refresh/',jwt_views.TokenRefreshView.as_view(),name='token_refresh'),
     path('', include('main.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

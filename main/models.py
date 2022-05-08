@@ -8,7 +8,7 @@ class Patient(models.Model):
     patient_id = models.IntegerField()
     patient_name = models.CharField(max_length=50)
     patient_age = models.IntegerField()
-    patient_img = models.ImageField()
+    patient_img = models.ImageField(upload_to = 'images/')
 
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
