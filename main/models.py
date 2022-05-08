@@ -21,5 +21,7 @@ class Prescription(models.Model):
     patient_id = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor_id = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     prescription_date = models.DateField(default=timezone.now)
-    prescription = models.TextField(max_length=200)
+    prescription_medicine = models.TextField(max_length=200)
+    prescription_img = models.ImageField()
+
 

@@ -33,14 +33,32 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class PatientSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=True)
+
     class Meta:
         model = Patient
-        fields = '__all__'
+        fields = ('user', 'patient_id', 'patient_name', 'patient_age')
+    
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = UserSerializer.create(UserSerializer(),validated_data=user_data)
+        patient = Patient(user=user,patient_id=validated_data['patient_id'],patient_name=validated_data['patient_name'],patient_age=validated_data['patient_age'])
+        patient.save()
+        return patient
+
 
 class DoctorSerializer(serializers.ModelSerializer):
+    user = UserSerializer(required=True)
     class Meta:
         model = Doctor
         fields = '__all__'
+    
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user = UserSerializer.create(UserSerializer(),validated_data=user_data)
+        doctor = Doctor(user=user,doctor_id=validated_data['doctor_id'],doctor_name=validated_data['doctor_name'],doctor_desc=validated_data['doctor_desc'])
+        doctor.save()
+        return doctor
 
 class PrescriptionSerializer(serializers.ModelSerializer):
     class Meta:
