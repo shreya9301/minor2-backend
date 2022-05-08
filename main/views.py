@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
+from matplotlib import path
 from rest_framework import permissions, status
 from rest_framework.parsers import FileUploadParser
 from rest_framework.decorators import (
@@ -50,6 +51,11 @@ def addPrescription(request):
 	img = request.data["prescription_img"]
 	presctiption_object = Prescription(doctor_id=Curr_Doc,patient_id=Curr_pati,prescription_medicine=list_of_medicine,prescription_img=img)
 	presctiption_object.save()
+	path_of_file = presctiption_object.prescription_img.path
+	number_of_divisons = len(list_of_medicine.split(','))
+	patient_name = Curr_pati.patient_name
+	print(path_of_file,number_of_divisons,patient_name)
+	handle_uploaded_image(path_of_file,number_of_divisons,patient_name)
 	return Response(status=status.HTTP_201_CREATED)
 	# return Response(status=status.HTTP_400_BAD_REQUEST)
 

@@ -3,6 +3,19 @@ import numpy as np
 import random
 import os
 import uuid
+def create_dirs(patient_name):
+        Base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # print(Base_dir)
+        Dir = os.path.join(Base_dir,"media/")
+        # print(Dir)
+        final_dir = os.path.join(Dir,patient_name+"/")
+        print(final_dir)
+        print(os.path.isdir(final_dir))
+        if (os.path.isdir(final_dir))== False :
+                os.mkdir(final_dir)
+        
+        return final_dir
+
 def Random_places(n,recons):
         # random_places = np.empty(recons)
         random_places = []
@@ -26,7 +39,7 @@ def Get_RGB(argb_int:int):
         return (red, green, blue, alpha)
 
 
-def create_image(raw_list: list, width: int, height: int,image_number: int):
+def create_image(raw_list: list, width: int, height: int,image_number: str):
         """
         For Creating the image 
         """
@@ -48,13 +61,13 @@ def create_image(raw_list: list, width: int, height: int,image_number: int):
         
 
 # patient_id , image location , image
-def handle_uploaded_image(img,username,patientId):
-        img = Image.open("./pic1.jpg") #change the image location
+def handle_uploaded_image(path_of_file,number_of_divison,patient_name):
+        img = Image.open(path_of_file) #change the image location
 
         width, height  = img.size
         # input n=number of divisions, k = min no of divisons
         print("Enter the value of N: ")
-        n = int(input())
+        n = number_of_divison
         print("Enter the Value of K: ")
         k = int(input())
 
@@ -119,28 +132,12 @@ def handle_uploaded_image(img,username,patientId):
                 img_cons.append(in_between_image)
 
                 #create directory using os module by name of patient_name and save encrypted images in the folder
-                '''dirname = f"{username}"
-                directory = "dirname"
-                parent_dir = "minor2/main"
-                path = os.path.join(parent_dir, directory) 
-                os.mkdir(path) 
-                #print("Directory '% s' created" % directory) '''
-
-                img_extension = os.path.splitext(img.name)[1]
-
-                # This will generate random folder for saving image using UUID
-                save_path = "static/" + str(uuid.uuid4())
-                if not os.path.exists(save_path):
-                # This will ensure that the path is created properly and will raise exception if the directory already exists
-                        os.makedirs(os.path.dirname(save_path), exist_ok=True)
-
-                # Create image save path with title
-                img_save_path = "%s/%s%s" % (save_path, "image", img_extension)
-                with open(img_save_path, "wb+") as f:
-                        for chunk in img.chunks():
-                                f.write(chunk)        
+        final_path = create_dirs(patient_name)
 
         for i in range(len(img_cons)):
-                create_image(img_cons[i],width,height,i)
+                create_image(img_cons[i],width,height,final_path+str(i))
                 #save image into above directory
 
+
+
+# create_dirs("kartik")
