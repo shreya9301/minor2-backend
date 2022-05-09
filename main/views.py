@@ -106,3 +106,5 @@ def img(request):
 	with open(path, 'rb') as f:
 		return HttpResponse(f.read(), content_type="image/jpeg")
 	return HttpResponse("hello")
+
+# only decrypted images are left
