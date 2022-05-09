@@ -12,7 +12,9 @@ from django.contrib.auth.models import User
 from .serializers import UserSerializer, PatientSerializer, DoctorSerializer, PrescriptionSerializer
 from .models import Doctor,Patient,Prescription
 from .utility import handle_uploaded_image
-
+from datetime import datetime
+import os
+from PIL import Image
 
 @api_view(['POST'])
 @permission_classes((permissions.AllowAny, ))
@@ -68,17 +70,39 @@ def get_prescription(request):
 	# Doctor and date => patient id, medicines 
 	doctor_id = request.GET['doctor_id']
 	Curr_Doc = Doctor.objects.get(doctor_id=doctor_id)
-	patient_id = request.GET['patient_id']
-	Curr_pati = Patient.objects.get(patient_id=patient_id)
+	# patient_id = request.GET['patient_id']
+	# Curr_pati = Patient.objects.get(patient_id=patient_id)
 	choosen_date = request.GET['date']
 	# print(choosen_date)
-	Prescription_list = Prescription.objects.filter(doctor_id=Curr_Doc,patient_id=Curr_pati,prescription_date=choosen_date)
+	choosen_date = datetime.strptime(choosen_date, '%Y-%m-%d')
+	# print(choosen_date)
+	Prescription_list = Prescription.objects.filter(doctor_id=Curr_Doc,prescription_date=choosen_date)
 	# Prescription_list = Prescription.objects.filter(doctor_id=Curr_Doc)
-	raw_image = Prescription_list[0].prescription_img
-	# return HttpResponse("Hello")
+	# raw_image = Prescription_list[0].prescription_img
+	Prescription_well = PrescriptionSerializer(Prescription_list, many=True)
+	print(Prescription_well.data[0]['prescription_img'])
+	return Response(Prescription_well.data, status=status.HTTP_200_OK)
 
-	return HttpResponse(raw_image, content_type="image/png")
+	# return HttpResponse(raw_image, content_type="image/png")
 
 
-# view preciption for paitent input id => presctipton ,images ,medicines 
-# when decrpt called return the imahge 
+@api_view(['POST'])
+@permission_classes((permissions.AllowAny, ))
+def get_all_prescription(request):
+	username = request.data['username']
+	user = User.objects.get(username=username)
+	patient = Patient.objects.get(user=user)
+	prescrip = Prescription.objects.filter(patient_id=patient)
+	prescrip_well = PrescriptionSerializer(prescrip, many=True)
+	return Response(prescrip_well.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny, ))
+def img(request):
+	print(request.GET['val'])
+	dir_name = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+	print(dir_name)
+	path = os.path.join(dir_name, request.GET['val'])
+	img = Image.open(path)
+	return HttpResponse(img, content_type="image/png")
+	# return HttpResponse("hello")
