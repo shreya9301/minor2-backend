@@ -65,6 +65,7 @@ def addPrescription(request):
 def get_prescription(request):
 	"""For getting the prescription of a patient"""
 	# print(request.GET['doctor_id'])
+	# Doctor and date => patient id, medicines 
 	doctor_id = request.GET['doctor_id']
 	Curr_Doc = Doctor.objects.get(doctor_id=doctor_id)
 	patient_id = request.GET['patient_id']
@@ -77,3 +78,7 @@ def get_prescription(request):
 	# return HttpResponse("Hello")
 
 	return HttpResponse(raw_image, content_type="image/png")
+
+
+# view preciption for paitent input id => presctipton ,images ,medicines 
+# when decrpt called return the imahge 
