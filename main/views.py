@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from matplotlib import path
+# from matplotlib import path
 from rest_framework import permissions, status
 from rest_framework.parsers import FileUploadParser
 from rest_framework.decorators import (
