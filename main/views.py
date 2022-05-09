@@ -103,6 +103,6 @@ def img(request):
 	dir_name = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	print(dir_name)
 	path = os.path.join(dir_name, request.GET['val'])
-	img = Image.open(path)
-	return HttpResponse(img, content_type="image/png")
-	# return HttpResponse("hello")
+	with open(path, 'rb') as f:
+		return HttpResponse(f.read(), content_type="image/jpeg")
+	return HttpResponse("hello")
