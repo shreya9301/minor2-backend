@@ -7,4 +7,5 @@ urlpatterns = [
     path('addPrescription/', views.addPrescription, name='add_prescription'),
     path('getPrescription/', views.get_prescription, name='get_prescription'),
     path('img/', views.img, name='img'),
+    path('get_prescription_img/', views.get_decrypted_img, name='get_decrypted_img'),
 ]

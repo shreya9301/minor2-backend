@@ -38,43 +38,43 @@ def create_image(raw_list: list, width: int, height: int):
         new_image.save("final.png")
         # new_image.save('new.png')
     
-share = np.empty((k,width*height*4))
-final = np.zeros((width*height*4))
-#intermediate = np.empty((width*height))
-intermediate = []
+def decrypted(idea):
+        share = np.empty((k,width*height*4))
+        final = np.zeros((width*height*4))
+        #intermediate = np.empty((width*height))
+        intermediate = []
 
-for i in range(0,k):
-    img = Image.open("./"+str(i)+".png")
-    # w, h  = img.size
-    for j in range(0,width*height):
-        inter_immeidate = img.getpixel((j%width,j//width))
-        # print("intermdiate value ",inter_immeidate)
-        for temp in inter_immeidate:
-            intermediate.append(temp)
-        
-    share[i] = np.asarray(intermediate)
-#     print(intermediate)
-#     print(type(intermediate))
+        for i in range(0,k):
+                img = Image.open("./"+str(i)+".png")
+                # w, h  = img.size
+                for j in range(0,width*height):
+                        inter_immeidate = img.getpixel((j%width,j//width))
+                        # print("intermdiate value ",inter_immeidate)
+                        for temp in inter_immeidate:
+                                intermediate.append(temp)
+                        
+                share[i] = np.asarray(intermediate)
+        #     print(intermediate)
+        #     print(type(intermediate))
 
-    intermediate = []
+        intermediate = []
 
-#print(share[0].size())
-print(final[0])
-final = final.astype(int)
+        #print(share[0].size())
+        print(final[0])
+        final = final.astype(int)
+        with Image2(filename =idea) as img:
 
-for i in range(0,k):
-        # print(k)
-        final = np.bitwise_or(final.astype(int),share[i].astype(int))
-        # print(share[i].astype(int))
-        # final[j] = final[j] | share[i]
+                # Generate noise image using spread() function
+                img.noise("laplacian", attenuate = 10.0)
+                img.save(filename =idea+"_noise.jpeg")
 
-#for i in range(len(final)):
-final = final.tolist()
+        for i in range(0,k):
+                # print(k)
+                final = np.bitwise_or(final.astype(int),share[i].astype(int))
+                # print(share[i].astype(int))
+                # final[j] = final[j] | share[i]
 
-with Image2(filename ="./pic1.jpg") as img:
-
-	# Generate noise image using spread() function
-	img.noise("laplacian", attenuate = 10.0)
-	img.save(filename ="noisekoala2.jpeg")
-# print(final[0::100])
-create_image(final,width,height)
+        #for i in range(len(final)):
+        final = final.tolist()
+        # print(final[0::100])
+        create_image(final,width,height)
