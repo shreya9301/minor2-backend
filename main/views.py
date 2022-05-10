@@ -42,10 +42,12 @@ def register_patient(request):
 @api_view(['POST'])
 @permission_classes((permissions.AllowAny, ))
 def addPrescription(request):
-	doctor_id = request.data['doctor_id']
-	Curr_Doc = Doctor.objects.get(doctor_id=doctor_id)
-	patient_id = request.data['patient_id']
-	Curr_pati = Patient.objects.get(patient_id=patient_id)
+	doctor_id = request.data['doctor_username']
+	user_doc = User.objects.get(username=doctor_id)
+	Curr_Doc = Doctor.objects.get(user=user_doc)
+	patient_id = request.data['patient_username']
+	user_pat = User.objects.get(username=patient_id)
+	Curr_pati = Patient.objects.get(user=user_pat)
 	list_of_medicine = request.data['prescription_medicine']
 	# parser_classes = [FileUploadParser]
 	# print(list_of_medicine)
@@ -55,7 +57,7 @@ def addPrescription(request):
 	presctiption_object.save()
 	path_of_file = presctiption_object.prescription_img.path
 	number_of_divisons = len(list_of_medicine.split(','))
-	patient_name = Curr_pati.patient_name
+	patient_name = patient_id
 	print(path_of_file,number_of_divisons,patient_name)
 	handle_uploaded_image(path_of_file,number_of_divisons,patient_name)
 	return Response(status=status.HTTP_201_CREATED)
@@ -68,8 +70,9 @@ def get_prescription(request):
 	"""For getting the prescription of a patient"""
 	# print(request.GET['doctor_id'])
 	# Doctor and date => patient id, medicines 
-	doctor_id = request.GET['doctor_id']
-	Curr_Doc = Doctor.objects.get(doctor_id=doctor_id)
+	doctor_id = request.data['username']
+	user_doc = User.objects.get(username=doctor_id)
+	Curr_Doc = Doctor.objects.get(user=user_doc)
 	# patient_id = request.GET['patient_id']
 	# Curr_pati = Patient.objects.get(patient_id=patient_id)
 	choosen_date = request.GET['date']
