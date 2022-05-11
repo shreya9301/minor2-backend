@@ -15,7 +15,7 @@ from .utility import handle_uploaded_image
 from datetime import datetime
 import os
 from PIL import Image
-from .utility_2 import decrypted
+from .utility_2 import decrypted, decryption_test
 
 @api_view(['POST'])
 @permission_classes((permissions.AllowAny, ))
@@ -118,11 +118,16 @@ def get_decrypted_img(request):
 	username = request.data['username']
 	user = User.objects.get(username=username)
 	patient = Patient.objects.get(user=user)
-	date = request.data['date']
-	date = datetime.strptime(date, '%Y-%m-%d')
+	in_date = request.data['date']
+	date = datetime.strptime(in_date, '%Y-%m-%d')
 	prescrip = Prescription.objects.filter(patient_id=patient,prescription_date=date)
-	Image_type = prescrip[0].prescription_img.path
-	decrypted(Image_type)
-	return HttpResponse(Image_type+"_noise.jpeg",content="image/jpeg")
+	Image_path = prescrip[0].prescription_img.path
+	# print(Image_type)
+	# decrypted(Image_type,username,date)
+	file_saved = decryption_test(Image_path,username,in_date)
+	with open(file_saved, 'rb') as f:
+		return HttpResponse(f.read(), content_type="image/jpeg")
+	# return HttpResponse("hello")
+	# return HttpResponse(Image_type+"_noise.jpeg",content="image/jpeg")
 
 	# prescrip_well = PrescriptionSerializer(prescrip, many=True)

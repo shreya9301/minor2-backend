@@ -2,10 +2,9 @@ from PIL import Image, ImageFilter
 import numpy as np
 from wand.image import Image as Image2
 # from main import create_image
+import os
 
-k = int(input())
-height = int(input())
-width = int(input())
+
 
 # def Get_RGB(argb_int:list):
 #         blue =  argb_int[0] & 255
@@ -38,7 +37,12 @@ def create_image(raw_list: list, width: int, height: int):
         new_image.save("final.png")
         # new_image.save('new.png')
     
-def decrypted(idea):
+def decrypted(idea,username,date):
+        k = int(input("Enter the value of k"))
+        img = Image.open(idea)
+        # height = int(input())
+        # width = int(input())
+        width, height  = img.size
         share = np.empty((k,width*height*4))
         final = np.zeros((width*height*4))
         #intermediate = np.empty((width*height))
@@ -62,12 +66,6 @@ def decrypted(idea):
         #print(share[0].size())
         print(final[0])
         final = final.astype(int)
-        with Image2(filename =idea) as img:
-
-                # Generate noise image using spread() function
-                img.noise("laplacian", attenuate = 10.0)
-                img.save(filename =idea+"_noise.jpeg")
-
         for i in range(0,k):
                 # print(k)
                 final = np.bitwise_or(final.astype(int),share[i].astype(int))
@@ -78,3 +76,20 @@ def decrypted(idea):
         final = final.tolist()
         # print(final[0::100])
         create_image(final,width,height)
+
+
+def decryption_test(path_of_file,username,date):
+        saving_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"/media/"+username+"/"+str(date)
+        file_saved = os.path.join(saving_dir,"final.png")
+        print(file_saved)
+        print(path_of_file)
+        with Image2(filename=path_of_file) as img:
+
+        #         # Generate noise image using spread() function
+                img.noise("laplacian", attenuate = 10.0)
+                img.save(filename = file_saved)
+
+        return file_saved
+
+        
+# test("username","date")

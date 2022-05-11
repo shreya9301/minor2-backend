@@ -139,7 +139,7 @@ def handle_uploaded_image(path_of_file,number_of_divison,patient_name):
         final_path = create_dirs(patient_name)
 
         for i in range(len(img_cons)):
-                create_image(img_cons[i],width,height,final_path+str(i))
+                create_image(img_cons[i],width,height,final_path+"/"+str(i))
                 #save image into above directory
 
 
