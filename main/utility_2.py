@@ -37,9 +37,11 @@ def create_image(raw_list: list, width: int, height: int):
         new_image.save("final.png")
         # new_image.save('new.png')
     
-def decrypted(idea,username,date):
+def decrypted(path_of_file,username,date):
         k = int(input("Enter the value of k"))
-        img = Image.open(idea)
+        saving_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"/media/"+username+"/"+str(date)
+
+        img = Image.open(path_of_file)
         # height = int(input())
         # width = int(input())
         width, height  = img.size
@@ -49,7 +51,7 @@ def decrypted(idea,username,date):
         intermediate = []
 
         for i in range(0,k):
-                img = Image.open("./"+str(i)+".png")
+                img = Image.open(saving_dir+"/"+str(i)+".png")
                 # w, h  = img.size
                 for j in range(0,width*height):
                         inter_immeidate = img.getpixel((j%width,j//width))
